@@ -14,14 +14,14 @@ root = Tk()
 
 def c_on_resize(event):
         # determine the ratio of old width/height to new width/height
-        print(event.width)
+        print(event.widget.winfo_reqwidth())
         # print(event.widget.width)
         wscale = float(event.width)/event.widget.winfo_reqwidth()
         hscale = float(event.height)/event.widget.winfo_reqheight()
         # event.widget.width = event.width
         # event.widget.height = event.height
         # resize the canvas
-        event.widget.config(width=event.width, height=event.height)
+        # event.widget.config(width=event.width, height=event.height)
         # rescale all the objects tagged with the "all" tag
         event.widget.scale("all",0,0,wscale,hscale)
 
@@ -52,7 +52,10 @@ pub_scrollbar.grid(column=1, row=2, sticky=(N, S))
 canvas = Canvas(mainframe, yscrollcommand=pub_scrollbar.set)
 # canvas.pack(fill='both', expand=True)
 canvas.grid(column=0, row=2, sticky=(N, E, S, W))
+canvas.columnconfigure(0, weight=1)
+canvas.config(scrollregion=(0,0,500,500))
 canvas.bind("<Configure>", c_on_resize)
+pub_scrollbar.config(command=canvas.yview)
 
 
 
@@ -64,8 +67,9 @@ for item in range(len(dl)):
     # pub_list_item = ttk.Label(pub_list_frame, text="item " +
     #                           str(item)).grid(column=0, row=item)
     pub = dl[item]
-    pub_list_item = PubItem(pub, pub_list_frame, item)
+    pub_list_item = PubItem(pub, canvas, item)
 
+# canvas.addtag_all("all")
 
 def exit_handler():
     sd()
@@ -74,9 +78,9 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-# canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)
+canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)
 #
-# pub_list_frame.update_idletasks()
+pub_list_frame.update_idletasks()
 #
 # canvas.config(scrollregion=canvas.bbox("all"))
 
