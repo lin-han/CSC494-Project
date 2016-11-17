@@ -49,7 +49,7 @@ ttk.Label(mainframe, text="Library").grid(column=0, row=1, sticky=(N, S))
 pub_scrollbar = Scrollbar(mainframe)
 pub_scrollbar.grid(column=1, row=2, sticky=(N, S))
 
-canvas = Canvas(mainframe, yscrollcommand=pub_scrollbar.set)
+canvas = Canvas(mainframe, yscrollcommand=pub_scrollbar.set, width=800, height=500)
 # canvas.pack(fill='both', expand=True)
 canvas.grid(column=0, row=2, sticky=(N, E, S, W))
 canvas.columnconfigure(0, weight=1)
@@ -67,7 +67,7 @@ for item in range(len(dl)):
     # pub_list_item = ttk.Label(pub_list_frame, text="item " +
     #                           str(item)).grid(column=0, row=item)
     pub = dl[item]
-    pub_list_item = PubItem(pub, canvas, item)
+    pub_list_item = PubItem(pub, pub_list_frame, item)
 
 # canvas.addtag_all("all")
 
@@ -78,7 +78,7 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)    
+canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)
 #
 pub_list_frame.update_idletasks()
 #
