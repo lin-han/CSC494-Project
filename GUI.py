@@ -78,7 +78,7 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)
+canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)    
 #
 pub_list_frame.update_idletasks()
 #
