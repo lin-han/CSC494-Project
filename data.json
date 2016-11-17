@@ -1,0 +1,123 @@
+[
+    {
+        "printed": "None",
+        "date_retrieved": "2016-11-10 02:22:32.959108",
+        "title": "Reference management software: a comparative analysis of four products",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:nZ9w5qmUBLYJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWCQim8NRxE1BAP_wbaeg559z3GL0gzPu&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 0,
+        "status": "Relevant",
+        "journal": "None",
+        "file_path": "C:\\Users\\Lin\\Desktop\\Massey-Gilmour_2011.pdf",
+        "tags": null,
+        "source": null,
+        "year": "2011",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "R Gilmour",
+            "L Cobus-Kuo"
+        ]
+    },
+    {
+        "printed": null,
+        "date_retrieved": "2016-11-10 02:22:43.465922",
+        "title": "Reference management software: a comparative analysis of four products",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:nZ9w5qmUBLYJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWCQipBLvr9DDsdSR0_sIpSIUZVm_NfRV&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 1,
+        "status": "Read",
+        "journal": null,
+        "file_path": null,
+        "tags": null,
+        "source": null,
+        "year": "2011",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "R Gilmour",
+            "L Cobus-Kuo"
+        ]
+    },
+    {
+        "printed": null,
+        "date_retrieved": "2016-11-15 05:51:35.733125",
+        "title": "Literature as exploration.",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:-rs0f_zmMEAJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWCrrFi_ZL54Cxui9I-q1YhFSXqZF_Q9C&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 2,
+        "status": "Unknown",
+        "journal": null,
+        "file_path": null,
+        "tags": null,
+        "source": null,
+        "year": "1968",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "LM Rosenblatt"
+        ]
+    },
+    {
+        "printed": null,
+        "date_retrieved": "2016-11-15 15:10:29.586154",
+        "title": "Common method biases in behavioral research: a critical review of the literature and recommended remedies.",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:tKZbwB5v3RYJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWCtuE6WDi9tdToMvGXgmpZS-8xpQAOZD&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 3,
+        "status": "To be read",
+        "journal": null,
+        "file_path": null,
+        "tags": null,
+        "source": null,
+        "year": "2003",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "PM Podsakoff",
+            "SB MacKenzie",
+            "JY Lee\u2026"
+        ]
+    },
+    {
+        "printed": null,
+        "date_retrieved": "2016-11-17 12:19:05.832740",
+        "title": "A handbook to literature",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:PYeDb7Nqin0J:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWC3o4rYG5foARP3qnTnYvwXKYXampbPD&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 4,
+        "status": "Unknown",
+        "journal": null,
+        "file_path": null,
+        "tags": null,
+        "source": null,
+        "year": "1996",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "W Harmon",
+            "CH Holman",
+            "A Hibbard",
+            "WF Thrall"
+        ]
+    },
+    {
+        "printed": null,
+        "date_retrieved": "2016-11-17 12:19:14.693320",
+        "title": "Marxism and literature",
+        "gscholar_link": "https://scholar.googleusercontent.com/scholar.bib?q=info:F5qNqS4tCeIJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAWC3o7OR_lbJ7MLvPLNS90pNhwVwBoci8&scisf=4&ct=citation&cd=0&hl=en",
+        "id": 5,
+        "status": "Unknown",
+        "journal": null,
+        "file_path": null,
+        "tags": null,
+        "source": null,
+        "year": "1977",
+        "quotes": null,
+        "notes": null,
+        "references": null,
+        "authors": [
+            "R Williams"
+        ]
+    }
+]
