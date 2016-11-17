@@ -1,6 +1,6 @@
 # import csv
 import json
-import pubextraction as pe
+from Pub_extraction_code_and_other_things import pubextraction as pe
 import extract_metadata as em
 import datetime
 from fuzzywuzzy import fuzz
@@ -12,14 +12,15 @@ NEW = "new"
 
 data_path = 'C:\\Users\\Lin\\Desktop\\data.json'
 
+data_list = []
 try:
-    data_list = json.load(data_path)
+    with open(data_path) as data:
+        data_list = json.load(data)
 except FileNotFoundError:
     data_list = []
 
 class Publication:
     def __init__(self):
-        data_list.append(self)
         self.id = None
         self.title = None
         self.year = None
@@ -35,7 +36,7 @@ class Publication:
         self.notes = None
         self.quotes = None
         self.date_retrieved = str(datetime.datetime.now())
-        self.status = None
+        self.status = "Unknown"
         self.printed = None
         # self.info = None
 
@@ -48,8 +49,12 @@ class Publication:
         self.authors = schly.bib['author'].split(' and ')
         self.gscholar_link = schly.url_scholarbib
         t = match_paper(self)
+        # skip match_paper
+        t = NEW
         if t == NEW:
-            data_list.append(self)
+            data_list.append(self.__dict__)
+            self.id = len(data_list) - 1
+        # data_list.append(self.__dict__)
         record_history(self, file, t)
 
 
@@ -73,11 +78,11 @@ def record_history(pub, file, t):
 
 def match_paper(pub):
     for paper in data_list:
-        if fuzz.ratio(pub.title, data_list[paper]['title']) > 90:
-            numauthors = pub.authors.length
-            if numauthors == data_list[paper]['authors']:
+        if fuzz.ratio(pub.title, paper['title']) > 90:
+            numauthors = len(pub.authors)
+            if numauthors == paper['authors']:
                 for author in range(numauthors):
-                    if not any(fuzz.token_sort_ratio(pub.authors[author], data_list[paper]['authors'][i]) for i in range(numauthors)) > 80:
+                    if not any(fuzz.token_sort_ratio(pub.authors[author], paper['authors'][i]) for i in range(numauthors)) > 80:
                         return DUPLICATE
                 return NEW
             else:
@@ -112,6 +117,7 @@ if __name__ == "__main__":
                      # pub1.quotes, pub1.date_retrieved, pub1.status]
     # pub1.store_paper('C:\\Users\\Lin\\Desktop\\csv1.csv')
     pub1 = Publication()
-    pub1.set_data("Reference management software: a comparative analysis of four products")
+    pub1.set_data("Reference management software: a comparative analysis of four products", 'C:\\Users\\Lin\\Desktop\\history.txt')
     pub2 = Publication()
-    pub2.set_data("Reference management software: a comparative analysis of four products")
+    pub2.set_data("Reference management software: a comparative analysis of four products", 'C:\\Users\\Lin\\Desktop\\history.txt')
+    store_data()

@@ -4,7 +4,7 @@ import subprocess
 
 import scholarly
 
-import scholar
+from Pub_extraction_code_and_other_things import scholar
 
 
 def extract_bib(pdf_file):
