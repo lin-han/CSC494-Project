@@ -4,13 +4,14 @@ from Pub_extraction_code_and_other_things import pubextraction as pe
 import extract_metadata as em
 import datetime
 from fuzzywuzzy import fuzz
+from Pub_extraction_code_and_other_things import get_references as gr
 
 
 DUPLICATE = "duplicate"
 NEW = "new"
 
 
-data_path = 'C:\\Users\\Lin\\Desktop\\data.json'
+data_path = 'data.json'
 
 data_list = []
 try:
@@ -48,6 +49,7 @@ class Publication:
         self.year = pubext['year']
         self.authors = schly.bib['author'].split(' and ')
         self.gscholar_link = schly.url_scholarbib
+        self.references = gr.get_references(title)
         t = match_paper(self)
         # skip match_paper
         t = NEW
@@ -117,7 +119,7 @@ if __name__ == "__main__":
                      # pub1.quotes, pub1.date_retrieved, pub1.status]
     # pub1.store_paper('C:\\Users\\Lin\\Desktop\\csv1.csv')
     pub1 = Publication()
-    pub1.set_data("Reference management software: a comparative analysis of four products", 'C:\\Users\\Lin\\Desktop\\history.txt')
+    pub1.set_data("Reference management software: a comparative analysis of four products", 'history.txt')
     pub2 = Publication()
-    pub2.set_data("Reference management software: a comparative analysis of four products", 'C:\\Users\\Lin\\Desktop\\history.txt')
+    pub2.set_data("Reference management software: a comparative analysis of four products", 'history.txt')
     store_data()
