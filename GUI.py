@@ -5,12 +5,9 @@ from data_storage import store_data as sd
 import atexit
 from Pub_extraction_code_and_other_things.PubItem import PubItem
 from Pub_extraction_code_and_other_things.search import SearchBar
-from Pub_extraction_code_and_other_things.AutoScrollbar import AutoScrollbar
-
 
 
 root = Tk()
-
 
 def c_on_resize(event):
         # determine the ratio of old width/height to new width/height
