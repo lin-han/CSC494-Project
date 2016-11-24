@@ -31,9 +31,9 @@ class SearchBar:
                     mainframe.grid(column=0, row=0, sticky="")
                     mainframe.columnconfigure(0, weight=1)
 
-                    ttk.Label(mainframe, text="First 10 results").grid(column=0, row=1, sticky="")
+                    ttk.Label(mainframe, text="First 10 results").grid(column=0, row=0, sticky="")
                     pub_list_frame = ttk.Frame(mainframe, padding="3 3 12 12")
-                    pub_list_frame.grid(column=0, row=2, sticky=(N, W, E, S))
+                    pub_list_frame.grid(column=0, row=1, sticky=(N, W, E, S))
                     pub_list_frame.columnconfigure(1, weight=1)
 
                     search_query = scholarly.search_pubs_query(search.get())
@@ -68,7 +68,7 @@ class SearchItem:
         def add_to_library():
             add_button["text"] = "Added"
             new_pub = Publication()
-            new_pub.set_data(pub.bib['title'].strip(), 'C:\\Users\\Lin\\Desktop\\history.txt')
+            new_pub.set_data(pub.bib['title'].strip(), 'C:\\Users\\Lin\\Desktop\\history.txt', 'search')
 
         add_button = ttk.Button(pub_list_item, text="Add", command=add_to_library)
         add_button.grid(column=2, row=2, sticky=(N, E, S))

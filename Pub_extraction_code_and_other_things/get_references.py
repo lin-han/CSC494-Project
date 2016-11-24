@@ -7,13 +7,25 @@ def capitalize_first_letter(s):
 def strip_punctuation(s):
     str = ''
     for letter in s:
-        if letter not in "'.,:!@#$%^&*():;_+/\\\"":
-            str += letter
+        if letter not in "'.,:!@#$%^&*():;_+=/\\\"":
+            if letter == "-":
+                str += ' '
+            else:
+                str += letter
     return str
 
+def pre_process_title(s):
+    s = strip_punctuation(s).lower()
+    split = s.split(' ')
+    words = []
+    for item in split:
+        if item != '':
+            words.append(item)
+    return ' '.join(words)
+
 def get_reference_ids(title):
-    expr = "Ti==" + "'" + strip_punctuation(title).lower() + "'"
-    print(strip_punctuation(title).lower())
+    expr = "Ti==" + "'" + pre_process_title(title) + "'"
+    print(pre_process_title(title))
 
     headers = {
         # Request headers
@@ -88,4 +100,4 @@ def get_references(title):
     return reference_list
 
 if __name__ == "__main__":
-    print(get_references('Reference management software: a comparative analysis of four products'))
+    print(get_references(' Reference  management:  software a comparative analysis of four products '))

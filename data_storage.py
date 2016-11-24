@@ -41,8 +41,7 @@ class Publication:
         self.printed = None
         # self.info = None
 
-
-    def set_data(self, title, file):
+    def set_data(self, title, file, source=''):
         pubext = pe.retrieve_publications_scholar_py(title)[0]
         schly = em.scholarly_extract(title)
         self.title = pubext['title']
@@ -50,6 +49,12 @@ class Publication:
         self.authors = schly.bib['author'].split(' and ')
         self.gscholar_link = schly.url_scholarbib
         self.references = gr.get_references(title)
+        if source == 'search':
+            self.source = 'Keyword search'
+        if source == 'backward':
+            self.source = 'Backward citation'
+        if source == 'forward':
+            self.source = 'Forward citation'
         t = match_paper(self)
         # skip match_paper
         t = NEW

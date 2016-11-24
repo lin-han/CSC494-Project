@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import ast
+import scholarly
+from data_storage import Publication
 
 
 class PubItem:
@@ -89,6 +91,53 @@ class PubItem:
         edit_button = ttk.Button(status_frame, text="Edit", width=10, command=open_edit)
         edit_button.grid(column=1, row=1, sticky=(N, W, E, S))
 
+        def c_on_resize(event):
+            # determine the ratio of old width/height to new width/height
+            print(event.widget.winfo_reqwidth())
+            # print(event.widget.width)
+            wscale = float(event.width)/event.widget.winfo_reqwidth()
+            hscale = float(event.height)/event.widget.winfo_reqheight()
+            # event.widget.width = event.width
+            # event.widget.height = event.height
+            # resize the canvas
+            # event.widget.config(width=event.width, height=event.height)
+            # rescale all the objects tagged with the "all" tag
+            event.widget.scale("all",0,0,wscale,hscale)
+
+        def open_references(*args):
+            references_window = Toplevel()
+            references_window.title("References")
+            mainframe = ttk.Frame(references_window, padding="3 3 12 12")
+            mainframe.grid(column=0, row=0, sticky="")
+            mainframe.columnconfigure(0, weight=1)
+            mainframe.rowconfigure(0, weight=1)
+
+            ttk.Label(mainframe, text='Papers referenced by ' + '"' + pub['title'] + '"').grid(column=0, row=0, sticky=(N, W, E, S))
+
+            pub_scrollbar = Scrollbar(mainframe)
+            pub_scrollbar.grid(column=1, row=1, sticky=(N, S))
+
+            canvas = Canvas(mainframe, yscrollcommand=pub_scrollbar.set, width=800, height=500)
+            # canvas.pack(fill='both', expand=True)
+            canvas.grid(column=0, row=1, sticky=(N, E, S, W))
+            canvas.columnconfigure(0, weight=1)
+            canvas.config(scrollregion=(0,0,500,500))
+            canvas.bind("<Configure>", c_on_resize)
+            pub_scrollbar.config(command=canvas.yview)
+
+
+            pub_list_frame = ttk.Frame(canvas, padding="3 3 12 12")
+            pub_list_frame.grid(column=0, row=1, sticky=(N, E, S, W))
+            pub_list_frame.columnconfigure(0, weight=1)
+
+            references = pub['references']
+            for i in range(len(references)):
+                ReferenceEntry(references[i], pub_list_frame, i)
+
+
+        references_button = ttk.Button(status_frame, text="Reference List", width=10, command=open_references)
+        references_button.grid(column=1, row=2, sticky=(N, W, E, S))
+
 class EditEntry:
 
     def __init__(self, pub, mainframe, attribute, position):
@@ -108,3 +157,28 @@ class EditEntry:
         edit_label.grid(column=0, row=0, sticky="E")
         edit_entry = ttk.Entry(edit_frame, width=50, textvariable=self.entry)
         edit_entry.grid(column=1, row=0, sticky=(N, W, S))
+
+class ReferenceEntry:
+
+    def __init__(self, title, pub_list_frame, position):
+        pub = next(scholarly.search_pubs_query(title))
+        pub_list_item = ttk.Frame(pub_list_frame, padding="3 3 12 12")
+        pub_list_item.grid(column=0, row=position, sticky=(N, W, E, S))
+        pub_list_item.columnconfigure(1, weight=1)
+        ttk.Separator(pub_list_item).grid(column=0, columnspan=3, row=0, sticky=(E, W))
+
+        list_number = ttk.Label(pub_list_item, text=str(position + 1))
+        list_number.grid(column=0, row=1, sticky=(N, W, E, S))
+
+        title = ttk.Label(pub_list_item, text=pub.bib['title'].strip(), font=("Segoe UI", 9, "bold"))
+        title.grid(column=1, row=1, sticky=(N, W, E, S))
+        info = ttk.Label(pub_list_item, text='Authors: ' + ', '.join(pub.bib['author'].split(' and ')))
+        info.grid(column=1, row=2, sticky=(N, W, E, S))
+
+        def add_to_library():
+            add_button["text"] = "Added"
+            new_pub = Publication()
+            new_pub.set_data(pub.bib['title'].strip(), 'C:\\Users\\Lin\\Desktop\\history.txt', 'backward')
+
+        add_button = ttk.Button(pub_list_item, text="Add", command=add_to_library)
+        add_button.grid(column=2, row=2, sticky=(N, E, S))
