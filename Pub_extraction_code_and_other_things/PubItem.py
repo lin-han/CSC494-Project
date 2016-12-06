@@ -3,6 +3,8 @@ from tkinter import ttk
 import ast
 import scholarly
 from data_storage import Publication
+from data_storage import data_list as dl
+from Pub_extraction_code_and_other_things.get_references import get_title
 
 
 class PubItem:
@@ -130,9 +132,16 @@ class PubItem:
             pub_list_frame.grid(column=0, row=1, sticky=(N, E, S, W))
             pub_list_frame.columnconfigure(0, weight=1)
 
-            references = pub['references']
-            for i in range(len(references)):
-                ReferenceEntry(references[i], pub_list_frame, i)
+            if pub["has_references"] is True:
+                for i in range(len(pub["reference_ids"])):
+                    print(pub["reference_ids"][i])
+                    ReferenceEntry(pub, pub["reference_ids"][i], pub_list_frame, i, True)
+            else:
+                references = pub['references']
+                for i in range(len(references)):
+                    ReferenceEntry(pub, references[i], pub_list_frame, i, False)
+                pub["has_references"] = True
+                print("has refs set to true")
 
 
         references_button = ttk.Button(status_frame, text="Reference List", width=10, command=open_references)
@@ -160,8 +169,7 @@ class EditEntry:
 
 class ReferenceEntry:
 
-    def __init__(self, title, pub_list_frame, position):
-        pub = next(scholarly.search_pubs_query(title))
+    def __init__(self, pub, id, pub_list_frame, position, flag):
         pub_list_item = ttk.Frame(pub_list_frame, padding="3 3 12 12")
         pub_list_item.grid(column=0, row=position, sticky=(N, W, E, S))
         pub_list_item.columnconfigure(1, weight=1)
@@ -170,15 +178,39 @@ class ReferenceEntry:
         list_number = ttk.Label(pub_list_item, text=str(position + 1))
         list_number.grid(column=0, row=1, sticky=(N, W, E, S))
 
-        title = ttk.Label(pub_list_item, text=pub.bib['title'].strip(), font=("Segoe UI", 9, "bold"))
-        title.grid(column=1, row=1, sticky=(N, W, E, S))
-        info = ttk.Label(pub_list_item, text='Authors: ' + ', '.join(pub.bib['author'].split(' and ')))
-        info.grid(column=1, row=2, sticky=(N, W, E, S))
+        if flag is False:
+            this_pub = next(scholarly.search_pubs_query(get_title(id)))
+
+            pub_title = this_pub.bib['title'].strip()
+            title = ttk.Label(pub_list_item, text=pub_title, font=("Segoe UI", 9, "bold"))
+            title.grid(column=1, row=1, sticky=(N, W, E, S))
+            authors = this_pub.bib['author'].split(' and ')
+            info = ttk.Label(pub_list_item, text='Authors: ' + ', '.join(authors))
+            info.grid(column=1, row=2, sticky=(N, W, E, S))
+            this_pub = Publication()
+            this_id = this_pub.shallow_add(pub_title, authors)
+            print(this_id)
+            if this_id is not None:
+                pub["reference_ids"].append(this_id)
+                print("got added to ref ids")
+        else:
+            this_pub = dl[str(id)]
+            pub_title = this_pub["title"]
+            title = ttk.Label(pub_list_item, text=pub_title, font=("Segoe UI", 9, "bold"))
+            title.grid(column=1, row=1, sticky=(N, W, E, S))
+            info = ttk.Label(pub_list_item, text='Authors: ' + ', '.join(this_pub['authors']))
+            info.grid(column=1, row=2, sticky=(N, W, E, S))
+            this_id = id
+
+
 
         def add_to_library():
+            # from GUI import lib_pub_list_frame
+            # from GUI import index
             add_button["text"] = "Added"
             new_pub = Publication()
-            new_pub.set_data(pub.bib['title'].strip(), 'C:\\Users\\Lin\\Desktop\\history.txt', 'backward')
+            new_pub.set_data(this_pub["title"], 'C:\\Users\\Lin\\Desktop\\history.txt', 'backward', new = False, this_id = this_id)
+            # pl_item = PubItem(new_pub, lib_pub_list_frame, index)
 
         add_button = ttk.Button(pub_list_item, text="Add", command=add_to_library)
         add_button.grid(column=2, row=2, sticky=(N, E, S))

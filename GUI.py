@@ -56,15 +56,18 @@ pub_scrollbar.config(command=canvas.yview)
 
 
 
-pub_list_frame = ttk.Frame(canvas, padding="3 3 12 12")
-pub_list_frame.grid(column=0, row=0, sticky=(N, E, S, W))
-pub_list_frame.columnconfigure(0, weight=1)
+lib_pub_list_frame = ttk.Frame(canvas, padding="3 3 12 12")
+lib_pub_list_frame.grid(column=0, row=0, sticky=(N, E, S, W))
+lib_pub_list_frame.columnconfigure(0, weight=1)
 
-for item in range(len(dl)):
-    # pub_list_item = ttk.Label(pub_list_frame, text="item " +
-    #                           str(item)).grid(column=0, row=item)
-    pub = dl[item]
-    pub_list_item = PubItem(pub, pub_list_frame, item)
+index = 0
+for item in dl:
+    if dl[item]["in_library"] is True:
+        # pub_list_item = ttk.Label(pub_list_frame, text="item " +
+        #                           str(item)).grid(column=0, row=item)
+        pub = dl[item]
+        pub_list_item = PubItem(pub, lib_pub_list_frame, index)
+        index += 1
 
 # canvas.addtag_all("all")
 
@@ -75,9 +78,9 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-canvas.create_window(0, 0, anchor=NW, window=pub_list_frame)
+canvas.create_window(0, 0, anchor=NW, window=lib_pub_list_frame)
 #
-pub_list_frame.update_idletasks()
+lib_pub_list_frame.update_idletasks()
 #
 # canvas.config(scrollregion=canvas.bbox("all"))
 

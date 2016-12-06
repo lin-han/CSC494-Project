@@ -13,12 +13,12 @@ NEW = "new"
 
 data_path = 'data.json'
 
-data_list = []
+data_list = {}
 try:
     with open(data_path) as data:
         data_list = json.load(data)
 except FileNotFoundError:
-    data_list = []
+    data_list = {}
 
 class Publication:
     def __init__(self):
@@ -39,16 +39,21 @@ class Publication:
         self.date_retrieved = str(datetime.datetime.now())
         self.status = "Unknown"
         self.printed = None
+        self.reference_ids = None
+        self.in_library = False
+        self.has_references = False
         # self.info = None
 
-    def set_data(self, title, file, source=''):
+    def set_data(self, title, file, source='', new = True, this_id = None):
         pubext = pe.retrieve_publications_scholar_py(title)[0]
         schly = em.scholarly_extract(title)
         self.title = pubext['title']
         self.year = pubext['year']
         self.authors = schly.bib['author'].split(' and ')
         self.gscholar_link = schly.url_scholarbib
-        self.references = gr.get_references(title)
+        self.references = gr.get_reference_ids(title)
+        self.reference_ids = []
+        self.in_library = True
         if source == 'search':
             self.source = 'Keyword search'
         if source == 'backward':
@@ -59,11 +64,25 @@ class Publication:
         # skip match_paper
         t = NEW
         if t == NEW:
-            data_list.append(self.__dict__)
-            self.id = len(data_list) - 1
+            if new == True:
+                self.id = len(data_list)
+                data_list[self.id] = self.__dict__
+            else:
+                self.id = this_id
+                data_list[str(self.id)] = self.__dict__
         # data_list.append(self.__dict__)
         record_history(self, file, t)
 
+    def shallow_add(self, title, authors):
+        self.title = title
+        self. authors = authors
+        t = match_paper(self)
+        # skip match_paper
+        t = NEW
+        if t == NEW:
+            self.id = len(data_list)
+            data_list[self.id] = self.__dict__
+            return self.id
 
 def store_data():
     # with open(csv_file, 'a', newline = '') as file:
@@ -82,21 +101,25 @@ def record_history(pub, file, t):
             file.write('"' + pub.title + '" is a duplicate (' + pub.date_retrieved + ')')
     file.close()
 
+def record_history(pub, file, t):
+    with open(file, 'a') as file:
+        if t == NEW:
+            file.write('Added "' + pub.title + '" to the library (' + pub.date_retrieved + ')')
+        elif t == DUPLICATE:
+            file.write('"' + pub.title + '" is a duplicate (' + pub.date_retrieved + ')')
+    file.close()
 
 def match_paper(pub):
     for paper in data_list:
-        if fuzz.ratio(pub.title, paper['title']) > 90:
-            numauthors = len(pub.authors)
-            if numauthors == paper['authors']:
-                for author in range(numauthors):
-                    if not any(fuzz.token_sort_ratio(pub.authors[author], paper['authors'][i]) for i in range(numauthors)) > 80:
-                        return DUPLICATE
-                return NEW
-            else:
-                return DUPLICATE
-        else:
+        if fuzz.ratio(pub.title, data_list[paper]['title']) < 90:
             return DUPLICATE
-
+        numauthors = len(pub.authors)
+        if numauthors != len(paper['authors']):
+            return DUPLICATE
+        for author in range(numauthors):
+            if not any(fuzz.token_sort_ratio(pub.authors[author], paper['authors'][i]) for i in range(numauthors)) > 80:
+                return DUPLICATE
+    return NEW
 
 if __name__ == "__main__":
     # pub = Publication()

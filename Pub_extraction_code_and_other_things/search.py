@@ -3,6 +3,8 @@ from tkinter import ttk
 # from Pub_extraction_code_and_other_things.SearchItem import SearchItem
 from data_storage import Publication
 import scholarly
+from Pub_extraction_code_and_other_things.PubItem import PubItem
+from data_storage import data_list as dl
 
 class SearchBar:
 
@@ -66,9 +68,11 @@ class SearchItem:
         info.grid(column=1, row=2, sticky=(N, W, E, S))
 
         def add_to_library():
+            # from GUI import lib_pub_list_frame
             add_button["text"] = "Added"
             new_pub = Publication()
             new_pub.set_data(pub.bib['title'].strip(), 'C:\\Users\\Lin\\Desktop\\history.txt', 'search')
+            # pl_item = PubItem(new_pub, lib_pub_list_frame, len(dl))
 
         add_button = ttk.Button(pub_list_item, text="Add", command=add_to_library)
         add_button.grid(column=2, row=2, sticky=(N, E, S))
